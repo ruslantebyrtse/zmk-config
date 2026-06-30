@@ -9,7 +9,6 @@
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/rgb.h>
 #include <dt-bindings/zmk/ext_power.h>
-#include <dt-bindings/zmk/modifiers.h>
 
 #define BASE 0
 #define LOWER 1
@@ -27,13 +26,21 @@
     };
   };
 
-  behaviors {
-    // Tap = Mission Control (Ctrl+Up). Hold Cmd + tap = Show Desktop (F11, Cmd suppressed).
-    mc_desk: mission_control_desktop {
-      compatible = "zmk,behavior-mod-morph";
+  macros {
+    arrow: arrow {       // ->
+      compatible = "zmk,behavior-macro";
       #binding-cells = <0>;
-      bindings = <&kp LC(UP)>, <&kp F11>;
-      mods = <(MOD_LGUI|MOD_RGUI)>;
+      bindings = <&kp MINUS &kp GT>;
+    };
+    dcolon: dcolon {     // ::
+      compatible = "zmk,behavior-macro";
+      #binding-cells = <0>;
+      bindings = <&kp COLON &kp COLON>;
+    };
+    fatarrow: fatarrow { // =>
+      compatible = "zmk,behavior-macro";
+      #binding-cells = <0>;
+      bindings = <&kp EQUAL &kp GT>;
     };
   };
 
@@ -56,26 +63,26 @@
         &kp LCTRL &kp LALT &kp LGUI &mo LOWER  &kp SPACE  &kp RET  &mo RAISE  &kp RGUI &kp RALT  &kp RCTRL
       >;
 
-      sensor-bindings = <&inc_dec_kp C_VOL_DN C_VOL_UP &inc_dec_kp C_PREV C_NEXT>;
+      sensor-bindings = <&inc_dec_kp C_VOL_DN C_VOL_UP &inc_dec_kp C_BRI_DN C_BRI_UP>;
     };
 
     lower_layer {
       display-name = "lower";
       // ------------------------------------------------------------------------------------------------------------
-      // | MCTL  |  F1 |  F2 |  F3  |  F4  |  F5  |                   |  F6  |  F7   |  F8   |  F9  |  F10  |  F11  |
+      // |       |  F1 |  F2 |  F3  |  F4  |  F5  |                   |  F6  |  F7   |  F8   |  F9  |  F10  |  F11  |
       // |   %   |  /  |  -  |  +   |  =   |  *   |                   |  !   |  ;    |  :    |  &   |   |   |  F12  |
       // |   `   |  ?  |  <  |  {   |  (   |  [   |                   |  ]   |  )    |  }    |  >   | BKSP  |   \   |
-      // |       |  ~  |  ^  |  _   |  @   |  $   |        |  |       |  #   |       |       |      |       |       |
+      // |       |  ~  |  ^  |  _   |  @   |  $   |        |  |       |  #   |  ->   |  ::   |  =>  |       |       |
       //               |     |      |      |      |        |  |       |      |       |       |      |
       bindings = <
-        &mc_desk  &kp F1    &kp F2    &kp F3    &kp F4    &kp F5                       &kp F6    &kp F7    &kp F8    &kp F9    &kp F10   &kp F11
+        &trans    &kp F1    &kp F2    &kp F3    &kp F4    &kp F5                       &kp F6    &kp F7    &kp F8    &kp F9    &kp F10   &kp F11
         &kp PRCNT &kp FSLH  &kp MINUS &kp PLUS  &kp EQUAL &kp ASTRK                    &kp EXCL  &kp SEMI  &kp COLON &kp AMPS  &kp PIPE  &kp F12
         &kp GRAVE &kp QMARK &kp LT    &kp LBRC  &kp LPAR  &kp LBKT                     &kp RBKT  &kp RPAR  &kp RBRC  &kp GT    &kp BSPC  &kp BSLH
-        &trans    &kp TILDE &kp CARET &kp UNDER &kp AT    &kp DLLR  &trans   &trans    &kp HASH  &trans    &trans    &trans    &trans    &trans
+        &trans    &kp TILDE &kp CARET &kp UNDER &kp AT    &kp DLLR  &trans   &trans    &kp HASH  &arrow    &dcolon   &fatarrow &trans    &trans
         &trans    &trans    &trans    &trans    &trans              &trans   &trans    &trans    &trans    &trans
       >;
 
-      sensor-bindings = <&inc_dec_kp C_VOL_DN C_VOL_UP &inc_dec_kp C_PREV C_NEXT>;
+      sensor-bindings = <&inc_dec_kp C_VOL_DN C_VOL_UP &inc_dec_kp C_BRI_DN C_BRI_UP>;
     };
 
     raise_layer {
@@ -94,7 +101,7 @@
                                 &trans       &trans       &trans       &trans          &trans  &trans    &trans    &trans    &trans    &trans
       >;
 
-      sensor-bindings = <&inc_dec_kp C_VOL_DN C_VOL_UP &inc_dec_kp C_PREV C_NEXT>;
+      sensor-bindings = <&inc_dec_kp C_VOL_DN C_VOL_UP &inc_dec_kp C_BRI_DN C_BRI_UP>;
     };
 
     adjust_layer {
